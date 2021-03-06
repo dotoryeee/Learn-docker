@@ -1,0 +1,21 @@
+version: "3" #도커 컴포즈 버전
+services: #컴포즈에서 실행할 컨테이너들을 정의
+  react: #컨테이너 이름
+    build: #dockerfile 정보 ↓
+      context: . #현재 위치에 있다
+      dockerfile: dockerfile.dev #파일이름
+    ports: #컨테이너 포트 매핑
+      - "3000:3000"
+    volumes: #호스트와 볼륨 매핑
+      - ./:/usr/src/app
+    stdin_open: true #리액트 앱을 종료할 떄 필요한 옵션(없으면 리액트에서 버스 발생)
+    environment:
+      - CHOKIDAR_USEPOLLING=true #리액트에서 핫 리로딩(실시간 업데이트)를 위한 옵션
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /usr/src/app/node_modules
+      - ./:/usr/src/app
+    command: ["npm", "run", "test"]
