@@ -1,0 +1,16 @@
+sudo: required
+
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - echo "building image with dockerfile"
+  - docker build -t dotoryeee/test2 dockerfile.dev
+
+script:
+  - docker run -e CI=true dotoryeee/test2 npm run test -- --coverage
+
+after_success:
+  - echo "TEST SUCCESS"
