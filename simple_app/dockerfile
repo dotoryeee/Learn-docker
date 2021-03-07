@@ -9,6 +9,7 @@ RUN npm run build
 
 FROM nginx
 #nginx 베이스 이미지
+EXPOSE 80
 COPY --from=builder /usr/src/app/build /usr/share/nginx/html
 #--from=builder : 다른 stage에 있는 파일을 복사할 때, 다른 stage 이름을 명시
 #/usr/src/app/build , /usr/share/nginx/html : builder stage에서 생성된 파일을 nginx 폴더에 복사

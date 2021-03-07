@@ -7,10 +7,22 @@ services:
 
 before_install:
   - echo "building image with dockerfile"
-  - docker build -t dotoryeee/test2 dockerfile.dev
+  - docker build -t dotoryeee/test2 -f dockerfile.dev ./
 
 script:
   - docker run -e CI=true dotoryeee/test2 npm run test -- --coverage
 
 after_success:
   - echo "TEST SUCCESS"
+
+deploy:
+  provider: elasticbeanstalk
+  region: "ap-northeast-2"
+  app: "simple-app"
+  env: "Simpleapp-env" #빈스톡 생성시 env 지정 가능
+  bucket_name: "elasticbeanstalk-ap-northeast-2-737382971423" #빈스톡 생성시 자동으로 생성된 s3 이름
+  bucket_path: "simple-app" #app 이름과 동일하게 작성
+  on:
+    branch: master #어떤 브랜치를 배포할 것 인가
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
